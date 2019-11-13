@@ -9,11 +9,26 @@ import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer, { rootSaga } from './modules';
 import createSagaMiddleware from '@redux-saga/core';
+import { tempSetUser } from './modules/user';
+import { check } from './lib/api/auth';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(sagaMiddleware)));
 
+const loadUser = () => {
+    try {
+        const user = localStorage.getItem('user');
+        if (!user) return;
+
+        store.dispatch(tempSetUser(user));
+        store.dispatch(check());
+    } catch (e) {
+        console.log('Unable to access the local storage.');
+    }
+}
+
 sagaMiddleware.run(rootSaga);
+loadUser();
 
 ReactDOM.render(
     <Provider store={store}>
