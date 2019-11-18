@@ -1,7 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import Responsive from '../common/Responsive';
 import Button from '../common/Button';
+import palette from '../../lib/styles/palette';
+import SubInfo from '../common/SubInfo';
+import Tags from '../common/Tags';
 
 const PostListBlock = styled(Responsive)`
     margin-top: 3rem;
@@ -13,42 +17,66 @@ const WritePostButtonWrapper = styled.div`
     margin-bottom: 3rem;
 `;
 
-const PostItemBlock = styled.div``;
+const PostItemBlock = styled.div`
+    padding-top: 3rem;
+    padding-bottom: 3rem;
 
-const SubInfo = styled.div``;
+    &:first-child {
+        padding-top: 0;
+    }
 
-const Tags = styled.div``;
+    & + & {
+        border-top: 1px solid ${palette.gray[2]};
+    }
 
-const PostItem = () => {
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 0;
+        margin-top: 0;
+        &:hover {
+            color: ${palette.gray[6]};
+        }
+    }
+
+    p {
+        margin-top: 2rem;
+    }
+`;
+
+const PostItem = ({ post }) => {
+    const { publishedDate, user, tags, title, body, _id } = post;
+
     return (
         <PostItemBlock>
-            <h2>Title</h2>
-            <SubInfo>
-                <span><b>username</b></span>
-                <span>{new Date().toLocaleDateString()}</span>
-            </SubInfo>
-            <Tags>
-                <div className="tag">#tag1</div>
-                <div className="tag">#tag2</div>
-            </Tags>
-            <p>A quick view...</p>
+            <h2><Link to={`/@${user.username}/${_id}`}>{title}</Link></h2>
+            <SubInfo username="username" publishedDate={new Date(publishedDate)} />
+            <Tags tags={tags} />
+            <p>{body}</p>
         </PostItemBlock>
     );
 };
 
-const PostList = () => {
+const PostList = ({ posts, loading, error, showWriteButton }) => {
+    if (error) {
+        return (<PostListBlock>An error has been occurred.</PostListBlock>);
+    }
+
     return (
         <PostListBlock>
             <WritePostButtonWrapper>
-                <Button cyan to="/write">
-                    Write
-                </Button>
+                {showWriteButton && (
+                    <Button cyan to="/write">
+                        Write
+                    </Button>
+                )}
             </WritePostButtonWrapper>
-            <div>
-                <PostItem />
-                <PostItem />
-                <PostItem />
-            </div>
+            {!loading && posts && (
+                <div>
+                    {posts.map(post => (
+                        <PostItem post={post} key={post._id} />
+                    ))}
+                </div>
+            )}
         </PostListBlock>
     );
 };

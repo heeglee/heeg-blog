@@ -48,7 +48,7 @@ const LoginForm = ({ history }) => {
 
     useEffect(() => {
         if (user) {
-            console.log(user);
+            console.log(user);          // CHKER
             history.push('/');
             try {
                 localStorage.setItem('user', JSON.stringify(user));

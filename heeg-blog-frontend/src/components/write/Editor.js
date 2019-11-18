@@ -43,18 +43,10 @@ const Editor = ({ title, body, onChangeField }) => {
             modules: {
                 // https://quilljs.com/docs/modules/toolbar/
                 toolbar: [
-                    [
-                        { header: '1' }, { header: '2' }
-                    ],
-                    [
-                        'bold', 'italic', 'underline', 'strike'
-                    ],
-                    [
-                        { list: 'ordered' }, { list: 'bullet' }
-                    ],
-                    [
-                        'blockquote', 'code-block', 'link', 'image'
-                    ],
+                    [{ header: '1' }, { header: '2' }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ list: 'ordered' }, { list: 'bullet' }],
+                    ['blockquote', 'code-block', 'link', 'image'],
                 ],
             },
         });
