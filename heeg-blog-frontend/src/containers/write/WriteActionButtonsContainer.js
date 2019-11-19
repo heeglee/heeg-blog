@@ -3,19 +3,26 @@ import { useSelector, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import WriteActionButtons from '../../components/write/WriteActionButtons';
 import { writePost } from '../../modules/write';
+import { updatePost } from '../../modules/write';
 
 const WriteActionButtonsContainer = ({ history }) => {
     const dispatch = useDispatch();
-    const { title, body, tags, post, postError } = useSelector(({ write }) => ({
+    const { title, body, tags, post, postError, originalPostId } = useSelector(({ write }) => ({
         title: write.title,
         body: write.body,
         tags: write.tags,
         post: write.post,
         postError: write.postError,
+        originalPostId: write.originalPostId,
     }));
 
     const onPublish = () => {
-        dispatch(writePost({ title, body, tags }));
+        if (originalPostId) {
+            dispatch(updatePost({ title, body, tags, id: originalPostId, }));
+            return;
+        } else {
+            dispatch(writePost({ title, body, tags }));
+        }
     };
 
     const onCancel = () => {
@@ -33,7 +40,7 @@ const WriteActionButtonsContainer = ({ history }) => {
     }, [history, post, postError]);
 
     return (
-        <WriteActionButtons onPublish={onPublish} onCancel={onCancel} />
+        <WriteActionButtons onPublish={onPublish} onCancel={onCancel} isEdit={!!originalPostId} />
     );
 };
 

@@ -58,6 +58,11 @@ const Editor = ({ title, body, onChangeField }) => {
             }
         });
     }, [onChangeField]);
+    
+    useEffect(() => {
+        quillInstance.current.root.innerHTML = body;
+        // eslint-disable-next-line
+    }, []);
 
     const onChangeTitle = e => {
         onChangeField({ key: 'title', value: e.target.value });

@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import { HelmetProvider } from 'react-helmet-async';
 import rootReducer, { rootSaga } from './modules';
 import createSagaMiddleware from '@redux-saga/core';
 import { tempSetUser, check } from './modules/user';
@@ -32,7 +33,9 @@ loadUser();
 ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>
-            <App />
+            <HelmetProvider>
+                <App />
+            </HelmetProvider>
         </BrowserRouter>
     </Provider>
     , document.getElementById('root')
